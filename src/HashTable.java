@@ -1,5 +1,4 @@
 import java.util.*;
-import java.awt.*;
 
 // A node of chains
 class HashNode<String, Integer> {
@@ -11,8 +10,7 @@ class HashNode<String, Integer> {
     HashNode<String, Integer> next;
 
     // Constructor
-    public HashNode(java.lang.String key, java.lang.Integer value, int hashCode)
-    {
+    public HashNode(java.lang.String key, java.lang.Integer value, int hashCode) {
         this.key = key;
         this.value = value;
         this.hashCode = hashCode;
@@ -37,6 +35,9 @@ public class HashTable<String, Integer> {
     //Number of collisions
     int numberOfCollisions;
 
+    //List of collisions
+    LinkedList<Map<java.lang.String, java.lang.Integer>> collisions;
+
 
     // Constructor Initializes capacity, size and
     // empty chains.
@@ -52,6 +53,8 @@ public class HashTable<String, Integer> {
         }
         size = 0;
         numberOfCollisions = 0;
+
+        collisions = new LinkedList<>();
 
         // Create empty chains
         for (int i = 0; i < numBuckets; i++)
@@ -160,6 +163,9 @@ public class HashTable<String, Integer> {
             if (head.key.equals(key) && head.hashCode == hashCode) {
                 head.value = (java.lang.Integer) value;
                 numberOfCollisions += 1;
+                Map<java.lang.String, java.lang.Integer> pair = new TreeMap<>();
+                pair.put((java.lang.String) key, (java.lang.Integer) value);
+                collisions.add(pair);
                 return;
             }
             head = head.next;
@@ -203,7 +209,10 @@ public class HashTable<String, Integer> {
         map.add("coder", 2);
         map.add("this", 4);
         map.add("hi", 5);
+        map.add("hi", 2);
+        map.add("dog", 5);
         System.out.println(map.numberOfCollisions);
+        System.out.println(map.collisions);
         System.out.println(map.size());
         System.out.println(map.listKeys());
         System.out.println(map.remove("this"));
@@ -216,3 +225,5 @@ public class HashTable<String, Integer> {
         System.out.println(map.get("hi"));
     }
 }
+
+
