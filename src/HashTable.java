@@ -1,22 +1,21 @@
-
 import java.util.*;
-
+import java.awt.*;
 
 class BinomialHeap {
 
 }
 
 // A node of chains
-class HashNode<K, V> {
-    K key;
-    V value;
+class HashNode<String, Integer> {
+    java.lang.String key;
+    java.lang.Integer value;
     final int hashCode;
 
     // Reference to next node
-    HashNode<K, V> next;
+    HashNode<String, Integer> next;
 
     // Constructor
-    public HashNode(K key, V value, int hashCode)
+    public HashNode(java.lang.String key, java.lang.Integer value, int hashCode)
     {
         this.key = key;
         this.value = value;
@@ -25,12 +24,10 @@ class HashNode<K, V> {
 }
 
 // Class to represent entire hash table
-class Map<K, V> {
-    //Set of Keys
-    private Set keySet;
+public class HashTable<String, Integer> {
 
     // bucketArray is used to store array of chains
-    private LinkedList<HashNode<K, V>> bucketArray;
+    private LinkedList<HashNode<String, Integer>> bucketArray;
 
     // Current capacity of array list
     private int numBuckets;
@@ -39,23 +36,41 @@ class Map<K, V> {
     private int size;
 
     //List of keys
-    private List<K> keyList;
+    private final LinkedList<String> keyList;
 
-    // Constructor (Initializes capacity, size and
+    //Number of collisions
+    int numberOfCollisions;
+
+
+    // Constructor Initializes capacity, size and
     // empty chains.
-    public Map() {
+    public HashTable() {
         keyList = new LinkedList<>();
         bucketArray = new LinkedList<>();
-        numBuckets = 10;
+        int random = new Random().nextInt(3);
+        switch (random) {
+            case 0 -> numBuckets = 30;
+            case 1 -> numBuckets = 300;
+            case 2 -> numBuckets = 1000;
+            default -> numBuckets = 0;
+        }
         size = 0;
+        numberOfCollisions = 0;
 
         // Create empty chains
         for (int i = 0; i < numBuckets; i++)
             bucketArray.add(null);
     }
 
-    public List<K> listKeys() {
+    public LinkedList<String> listKeys() {
         return new LinkedList<>(keyList);
+    }
+
+    public void increase(String key) {
+        java.lang.Integer value = this.get(key);
+        this.remove(key);
+        this.add(key, (Integer) java.lang.Integer.valueOf(value + 1));
+
     }
 
     public int size() {
@@ -66,13 +81,13 @@ class Map<K, V> {
         return size() == 0;
     }
 
-    private final int hashCode(K key) {
+    private final int hashCode(String key) {
         return Objects.hashCode(key);
     }
 
     // This implements hash function to find index
     // for a key
-    private int getBucketIndex(K key) {
+    private int getBucketIndex(String key) {
         int hashCode = hashCode(key);
         int index = hashCode % numBuckets;
         // key.hashCode() could be negative.
@@ -81,15 +96,15 @@ class Map<K, V> {
     }
 
     // Method to remove a given key
-    public V remove(K key) {
+    public Integer remove(String key) {
         // Apply hash function to find index for given key
         int bucketIndex = getBucketIndex(key);
         int hashCode = hashCode(key);
         // Get head of chain
-        HashNode<K, V> head = bucketArray.get(bucketIndex);
+        HashNode<String, Integer> head = bucketArray.get(bucketIndex);
 
         // Search for key in its chain
-        HashNode<K, V> prev = null;
+        HashNode<String, Integer> prev = null;
         while (head != null) {
             // If Key found
             if (head.key.equals(key) && hashCode == head.hashCode)
@@ -113,16 +128,17 @@ class Map<K, V> {
         else
             bucketArray.set(bucketIndex, head.next);
 
-        return head.value;
+        keyList.remove();
+        return (Integer) head.value;
     }
 
     // Returns value for a key
-    public V get(K key) {
+    public java.lang.Integer get(String key) {
         // Find head of chain for given key
         int bucketIndex = getBucketIndex(key);
         int hashCode = hashCode(key);
 
-        HashNode<K, V> head = bucketArray.get(bucketIndex);
+        HashNode<String, Integer> head = bucketArray.get(bucketIndex);
 
         // Search key in chain
         while (head != null) {
@@ -136,19 +152,18 @@ class Map<K, V> {
     }
 
     // Adds a key value pair to hash
-    public void add(K key, V value) {
-        //Puts the key in the list
-        keyList.add(key);
+    public void add(String key, Integer value) {
 
         // Find head of chain for given key
         int bucketIndex = getBucketIndex(key);
         int hashCode = hashCode(key);
-        HashNode<K, V> head = bucketArray.get(bucketIndex);
+        HashNode<String, Integer> head = bucketArray.get(bucketIndex);
 
         // Check if key is already present
         while (head != null) {
             if (head.key.equals(key) && head.hashCode == hashCode) {
-                head.value = value;
+                head.value = (java.lang.Integer) value;
+                numberOfCollisions += 1;
                 return;
             }
             head = head.next;
@@ -157,43 +172,51 @@ class Map<K, V> {
         // Insert key in chain
         size++;
         head = bucketArray.get(bucketIndex);
-        HashNode<K, V> newNode
-                = new HashNode<K, V>(key, value, hashCode);
+        HashNode<String, Integer> newNode
+                = new HashNode<>((java.lang.String) key, (java.lang.Integer) value, hashCode);
         newNode.next = head;
+
+        //Puts the key in the list
+        keyList.add(key);
+
         bucketArray.set(bucketIndex, newNode);
 
         // If load factor goes beyond threshold, then
         // double hash table size
         if ((1.0 * size) / numBuckets >= 0.7) {
-            LinkedList<HashNode<K, V>> temp = bucketArray;
+            LinkedList<HashNode<String, Integer>> temp = bucketArray;
             bucketArray = new LinkedList<>();
             numBuckets = 2 * numBuckets;
             size = 0;
             for (int i = 0; i < numBuckets; i++)
                 bucketArray.add(null);
 
-            for (HashNode<K, V> headNode : temp) {
+            for (HashNode<String, Integer> headNode : temp) {
                 while (headNode != null) {
-                    add(headNode.key, headNode.value);
+                    add((String) headNode.key, (Integer) headNode.value);
                     headNode = headNode.next;
                 }
             }
         }
     }
 
-    // Driver method to test Map class
-    public static void main(String[] args)
-    {
-        Map<String, Integer> map = new Map<>();
+    // Driver method to test HashTable class
+    public static void main(java.lang.String[] args) {
+        HashTable<java.lang.String, java.lang.Integer> map = new HashTable<>();
         map.add("this", 1);
         map.add("coder", 2);
         map.add("this", 4);
         map.add("hi", 5);
+        System.out.println(map.numberOfCollisions);
         System.out.println(map.size());
+        System.out.println(map.listKeys());
         System.out.println(map.remove("this"));
         System.out.println(map.remove("this"));
         System.out.println(map.size());
         System.out.println(map.isEmpty());
         System.out.println(map.listKeys());
+        System.out.println(map.get("hi"));
+        map.increase("hi");
+        System.out.println(map.get("hi"));
     }
 }
