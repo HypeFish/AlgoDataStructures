@@ -1,10 +1,6 @@
 import java.util.*;
 import java.awt.*;
 
-class BinomialHeap {
-
-}
-
 // A node of chains
 class HashNode<String, Integer> {
     java.lang.String key;
