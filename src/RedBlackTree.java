@@ -258,7 +258,6 @@ public class RedBlackTree {
 
     public void inorder() {
         inOrderHelper(this.root);
-        this.printTree();
     }
 
     public void postorder() {
@@ -273,7 +272,6 @@ public class RedBlackTree {
         while (node.left != TNULL) {
             node = node.left;
         }
-        this.printTree();
         return node;
     }
 
@@ -281,7 +279,6 @@ public class RedBlackTree {
         while (node.right != TNULL) {
             node = node.right;
         }
-        this.printTree();
         return node;
     }
 
@@ -295,7 +292,6 @@ public class RedBlackTree {
             x = y;
             y = y.parent;
         }
-        this.printTree();
         return y;
     }
 
@@ -310,7 +306,6 @@ public class RedBlackTree {
             y = y.parent;
         }
 
-        this.printTree();
         return y;
     }
 
@@ -388,18 +383,15 @@ public class RedBlackTree {
             return;
         }
 
-        this.printTree();
         fixInsert(node);
     }
 
     public Node getRoot() {
-        this.printTree();
         return this.root;
     }
 
     public void deleteNode(int data) {
         deleteNodeHelper(this.root, data);
-        this.printTree();
     }
 
     public void printTree() {
@@ -449,7 +441,7 @@ public class RedBlackTree {
         System.out.println();
 
         Scanner s = new Scanner(System.in);
-        System.out.println("Would you like to search x, sort, or insert x? Press q to quit");
+        System.out.println("Would you like to search x, sort, delete, or insert x? Press q to quit");
 
         boolean running = true;
         while (running) {
@@ -460,15 +452,24 @@ public class RedBlackTree {
                     int int1 = s.nextInt();
                     System.out.println(bst.searchTree(int1));
                     System.out.println(bst.searchTree(int1).data);
+                    System.out.println();
                     bst.printTree();
                 }
                 case "sort" -> {
                     bst.inorder();
+                    System.out.println();
                     bst.printTree();
                 }
                 case "insert" -> {
                     int int1 = s.nextInt();
                     bst.insert(int1);
+                    System.out.println();
+                    bst.printTree();
+                }
+                case "delete" -> {
+                    int int1 = s.nextInt();
+                    bst.deleteNode(int1);
+                    System.out.println();
                     bst.printTree();
                 }
                 default -> System.out.println("Unknown command ");
