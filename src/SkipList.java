@@ -1,4 +1,5 @@
 import java.util.Random;
+import java.util.Scanner;
 
 interface SkippableList<T extends Comparable<? super T>> {
     int LEVELS = 5;
@@ -13,7 +14,7 @@ public class SkipList<T extends Comparable<? super T>> implements SkippableList<
 
     public static void main(String[] args) {
         SkipList<Integer> sl = new SkipList<>();
-        int[] data = {4,2,7,0,9,1,3,7,3,4,5,6,0,2,8};
+        int[] data = {5, 3, 1, 13, 20, 11, 24, 6, 9, 10, 70, 0, 4, 43, 12};
         for (int i : data) {
             sl.insert(i);
         }
@@ -27,6 +28,33 @@ public class SkipList<T extends Comparable<? super T>> implements SkippableList<
         sl.insert(69);
         sl.print();
         sl.search(69);
+
+        Scanner s = new Scanner(System.in);
+        System.out.println("Would you like to search x, delete x, or insert x? Press q to quit");
+
+        boolean running = true;
+        while (running) {
+            String next = s.next();
+            switch (next) {
+                case "q" -> running = false;
+                case "search" -> {
+                    int int1 = s.nextInt();
+                    System.out.println(sl.search(int1));
+                    sl.print();
+                }
+                case "delete" -> {
+                    int int1 = s.nextInt();
+                    System.out.println(sl.delete(int1));
+                    sl.print();
+                }
+                case "insert" -> {
+                    int int1 = s.nextInt();
+                    sl.insert(int1);
+                    sl.print();
+                }
+                default -> System.out.println("Unknown command ");
+            }
+        }
     }
 
     private final SkipNode<T> head = new SkipNode<>(null);

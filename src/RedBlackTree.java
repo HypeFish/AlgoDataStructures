@@ -258,6 +258,7 @@ public class RedBlackTree {
 
     public void inorder() {
         inOrderHelper(this.root);
+        this.printTree();
     }
 
     public void postorder() {
@@ -272,6 +273,7 @@ public class RedBlackTree {
         while (node.left != TNULL) {
             node = node.left;
         }
+        this.printTree();
         return node;
     }
 
@@ -279,6 +281,7 @@ public class RedBlackTree {
         while (node.right != TNULL) {
             node = node.right;
         }
+        this.printTree();
         return node;
     }
 
@@ -292,6 +295,7 @@ public class RedBlackTree {
             x = y;
             y = y.parent;
         }
+        this.printTree();
         return y;
     }
 
@@ -306,6 +310,7 @@ public class RedBlackTree {
             y = y.parent;
         }
 
+        this.printTree();
         return y;
     }
 
@@ -343,6 +348,7 @@ public class RedBlackTree {
         }
         y.right = x;
         x.parent = y;
+
     }
 
     public void insert(int key) {
@@ -382,15 +388,18 @@ public class RedBlackTree {
             return;
         }
 
+        this.printTree();
         fixInsert(node);
     }
 
     public Node getRoot() {
+        this.printTree();
         return this.root;
     }
 
     public void deleteNode(int data) {
         deleteNodeHelper(this.root, data);
+        this.printTree();
     }
 
     public void printTree() {
@@ -451,12 +460,19 @@ public class RedBlackTree {
                     int int1 = s.nextInt();
                     System.out.println(bst.searchTree(int1));
                     System.out.println(bst.searchTree(int1).data);
-                }
-                case "sort" -> bst.inorder();
-                case "insert" -> {
-                    bst.insert(1);
                     bst.printTree();
                 }
+                case "sort" -> {
+                    bst.inorder();
+                    bst.printTree();
+                }
+                case "insert" -> {
+                    int int1 = s.nextInt();
+                    bst.insert(int1);
+                    bst.printTree();
+                }
+                default -> System.out.println("Unknown command ");
+
             }
         }
     }
