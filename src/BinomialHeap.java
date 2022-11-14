@@ -373,13 +373,19 @@ class Main {
 
         // Inserting in the binomial heap
         // Custom input integer values
-        binHeap.insert(12);
-        binHeap.insert(8);
-        binHeap.insert(5);
-        binHeap.insert(15);
         binHeap.insert(7);
         binHeap.insert(2);
-        binHeap.insert(9);
+        binHeap.insert(4);
+        binHeap.insert(17);
+        binHeap.insert(1);
+        binHeap.insert(11);
+        binHeap.insert(6);
+        binHeap.insert(8);
+        binHeap.insert(15);
+        binHeap.insert(10);
+        binHeap.insert(20);
+        binHeap.insert(5);
+
 
         // Size of binomial heap
         System.out.println("Size of the binomial heap is "
@@ -388,8 +394,18 @@ class Main {
         // Displaying the binomial heap
         binHeap.displayHeap();
 
+        // checking if heap is empty
+        System.out.println(binHeap.isEmpty());
+        System.out.println(binHeap.extractMin());
+
+        binHeap.displayHeap();
+
+        binHeap.decreaseKeyValue(15, 1);
+
+        binHeap.displayHeap();
+
         // Deletion in binomial heap
-        binHeap.delete(15);
+        //binHeap.delete(15);
         binHeap.delete(8);
 
         // Size of binomial heap
@@ -402,7 +418,6 @@ class Main {
         // Making the heap empty
         binHeap.makeEmpty();
 
-        // checking if heap is empty
-        System.out.println(binHeap.isEmpty());
+
     }
 }

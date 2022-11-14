@@ -1,3 +1,7 @@
+import com.sun.source.tree.ForLoopTree;
+import com.sun.source.tree.Tree;
+
+import java.io.*;
 import java.util.*;
 
 // Java program to implement
@@ -15,8 +19,7 @@ class MyLinkedList<T> extends LinkedList<T> {
         Node next;
 
         // Constructor
-        Node(int d)
-        {
+        Node(int d) {
             data = d;
             next = null;
         }
@@ -26,8 +29,7 @@ class MyLinkedList<T> extends LinkedList<T> {
 
     // Method to insert a new node
     public MyLinkedList<T> insert(MyLinkedList<T> list,
-                                    int data)
-    {
+                                  int data) {
         // Create a new node with given data
         Node new_node = new Node(data);
         new_node.next = null;
@@ -36,8 +38,7 @@ class MyLinkedList<T> extends LinkedList<T> {
         // then make the new node as head
         if (list.head == null) {
             list.head = new_node;
-        }
-        else {
+        } else {
             // Else traverse till the last node
             // and insert the new_node there
             Node last = list.head;
@@ -56,8 +57,7 @@ class MyLinkedList<T> extends LinkedList<T> {
     // **************TRAVERSAL**************
 
     // Method to print the LinkedList.
-    public void printList(MyLinkedList<T> list)
-    {
+    public void printList(MyLinkedList<T> list) {
         Node currNode = list.head;
 
         System.out.print("\nLinkedList: ");
@@ -77,8 +77,7 @@ class MyLinkedList<T> extends LinkedList<T> {
 
     // Method to delete a node in the LinkedList by KEY
     public MyLinkedList<T> deleteByKey(MyLinkedList<T> list,
-                                         int key)
-    {
+                                       int key) {
         // Store head node
         Node currNode = list.head, prev = null;
 
@@ -140,8 +139,7 @@ class MyLinkedList<T> extends LinkedList<T> {
     // **************DELETION AT A POSITION**************
 
     // Method to delete a node in the LinkedList by POSITION
-    public MyLinkedList<T> deleteAtPosition(MyLinkedList<T> list, int index)
-    {
+    public MyLinkedList<T> deleteAtPosition(MyLinkedList<T> list, int index) {
         // Store head node
         Node currNode = list.head, prev = null;
 
@@ -183,8 +181,7 @@ class MyLinkedList<T> extends LinkedList<T> {
                 System.out.println(
                         index + " position element deleted");
                 break;
-            }
-            else {
+            } else {
                 // If current position is not the index
                 // continue to next node
                 prev = currNode;
@@ -214,8 +211,7 @@ class MyLinkedList<T> extends LinkedList<T> {
     // **************MAIN METHOD**************
 
     // method to create a Singly linked list with n nodes
-    public static void main(String[] args)
-    {
+    public static void main(String[] args) {
         /* Start with the empty list. */
         MyLinkedList<Integer> list = new MyLinkedList<>();
 
@@ -321,13 +317,16 @@ public class HashTable<String, Integer> {
     private int size;
 
     //List of keys
-    private final MyLinkedList<String> keyList;
+    private final MyLinkedList<java.lang.String> keyList;
 
     //Number of collisions
     int numberOfCollisions;
 
     //List of collisions
     MyLinkedList<Map<java.lang.String, java.lang.Integer>> collisions;
+    Map<java.lang.String, java.lang.Integer> frequency;
+
+
 
 
     // Constructor Initializes capacity, size and
@@ -335,24 +334,20 @@ public class HashTable<String, Integer> {
     public HashTable() {
         keyList = new MyLinkedList<>();
         bucketArray = new MyLinkedList<>();
-        int random = new Random().nextInt(3);
-        switch (random) {
-            case 0 -> numBuckets = 30;
-            case 1 -> numBuckets = 300;
-            case 2 -> numBuckets = 1000;
-            default -> numBuckets = 0;
-        }
+        //numBuckets = 30;
+        //numBuckets = 300;
+        numBuckets = 1000;
         size = 0;
         numberOfCollisions = 0;
-
         collisions = new MyLinkedList<>();
+        frequency = new TreeMap<>();
 
         // Create empty chains
         for (int i = 0; i < numBuckets; i++)
             bucketArray.add(null);
     }
 
-    public LinkedList<String> listKeys() {
+    public LinkedList<java.lang.String> listKeys() {
         return new LinkedList<>(keyList);
     }
 
@@ -392,14 +387,16 @@ public class HashTable<String, Integer> {
         int hashCode = hashCode(key);
         // Get head of chain
         HashNode<String, Integer> head = bucketArray.get(bucketIndex);
+        int freq = 0;
 
         // Search for key in its chain
         HashNode<String, Integer> prev = null;
         while (head != null) {
             // If Key found
-            if (head.key.equals(key) && hashCode == head.hashCode)
+            if (head.key.equals(key) && hashCode == head.hashCode) {
+                keyList.remove(key);
                 break;
-
+            }
             // Else keep moving in chain
             prev = head;
             head = head.next;
@@ -413,12 +410,13 @@ public class HashTable<String, Integer> {
         size--;
 
         // Remove key
-        if (prev != null)
+        if (prev != null) {
             prev.next = head.next;
+        }
         else
             bucketArray.set(bucketIndex, head.next);
 
-        keyList.remove();
+        numberOfCollisions -= 1;
         return (Integer) head.value;
     }
 
@@ -449,14 +447,18 @@ public class HashTable<String, Integer> {
         int hashCode = hashCode(key);
         HashNode<String, Integer> head = bucketArray.get(bucketIndex);
 
+
         // Check if key is already present
         while (head != null) {
+
             if (head.key.equals(key) && head.hashCode == hashCode) {
                 head.value = (java.lang.Integer) value;
                 numberOfCollisions += 1;
-                Map<java.lang.String, java.lang.Integer> pair = new TreeMap<>();
+
+                HashMap<java.lang.String, java.lang.Integer> pair = new HashMap<>();
                 pair.put((java.lang.String) key, (java.lang.Integer) value);
                 collisions.add(pair);
+                frequency = pair;
                 return;
             }
             head = head.next;
@@ -470,7 +472,7 @@ public class HashTable<String, Integer> {
         newNode.next = head;
 
         //Puts the key in the list
-        keyList.add(key);
+        keyList.add((java.lang.String) key);
 
         bucketArray.set(bucketIndex, newNode);
 
@@ -493,28 +495,89 @@ public class HashTable<String, Integer> {
         }
     }
 
+    private int frequency(java.lang.String key) {
+        ArrayList<java.lang.String> list = new ArrayList<>(keyList);
+        return Collections.frequency(list, key);
+    }
+
+    public List<Map<java.lang.String, java.lang.Integer>> listCollisions() {
+        List<Map<java.lang.String, java.lang.Integer>> list = new LinkedList<>();
+        Map<java.lang.String, java.lang.Integer> pair = new TreeMap<>();
+
+        for (java.lang.String key: keyList) {
+            pair.put(key, frequency(key));
+        }
+        list.add(pair);
+        return list;
+    }
+
+
     // Driver method to test HashTable class
-    public static void main(java.lang.String[] args) {
-        HashTable<java.lang.String, java.lang.Integer> map = new HashTable<>();
-        map.add("this", 1);
-        map.add("coder", 2);
-        map.add("this", 4);
-        map.add("hi", 5);
-        map.add("hi", 2);
-        map.add("dog", 5);
-        System.out.println(map.numberOfCollisions);
-        System.out.println(map.collisions);
-        System.out.println(map.size());
-        System.out.println(map.listKeys());
-        System.out.println(map.remove("this"));
-        System.out.println(map.remove("this"));
-        System.out.println(map.size());
-        System.out.println(map.isEmpty());
-        System.out.println(map.listKeys());
-        System.out.println(map.get("hi"));
-        map.increase("hi");
-        System.out.println(map.get("hi"));
+    public static void main(java.lang.String[] args) throws IOException {
+//        HashTable<java.lang.String, java.lang.Integer> map = new HashTable<>();
+//        map.add("this", 1);
+//        map.add("coder", 2);
+//        map.add("this", 4);
+//        map.add("hi", 5);
+//        map.add("hi", 2);
+//        map.add("dog", 5);
+//        System.out.println(map.numberOfCollisions);
+//        System.out.println(map.collisions);
+//        System.out.println(map.size());
+//        System.out.println(map.listKeys());
+//        System.out.println(map.remove("this"));
+//        System.out.println(map.remove("this"));
+//        System.out.println(map.size());
+//        System.out.println(map.isEmpty());
+//        System.out.println(map.listKeys());
+//        System.out.println(map.get("hi"));
+//        map.increase("hi");
+//        System.out.println(map.get("hi"));
+        // File path is passed as parameter
+
+        HashTable<java.lang.String, java.lang.Integer> alice = new HashTable<>();
+        int wordCount = 0;
+
+
+
+
+        Scanner scanner = new Scanner(new BufferedInputStream(
+                (new FileInputStream("alice_in_wonderland.txt"))));
+        while (scanner.hasNext()) {
+            alice.add(scanner.next(), wordCount);
+            wordCount++;
+        }
+
+
+
+        System.out.println(alice.numberOfCollisions);
+        System.out.println(alice.frequency("Alice"));
+        System.out.println(alice.listCollisions());
+        System.out.println(alice.listKeys());
+        System.out.println(alice.size());
+
+        System.out.println();
+
+        System.out.println(alice.remove("Project"));
+        System.out.println(alice.listKeys());
+        System.out.println(alice.numberOfCollisions);
+        System.out.println(alice.size());
+
+        System.out.println();
+
+        System.out.println(alice.remove("Alice"));
+        System.out.println(alice.listKeys());
+        System.out.println(alice.numberOfCollisions);
+        System.out.println(alice.size());
+
+        System.out.println();
+
+        System.out.println(alice.get("The"));
+        alice.increase("The");
+        System.out.println(alice.get("The"));
+
     }
 }
+
 
 
