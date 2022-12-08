@@ -327,16 +327,14 @@ public class HashTable<String, Integer> {
     Map<java.lang.String, java.lang.Integer> frequency;
 
 
-
-
     // Constructor Initializes capacity, size and
     // empty chains.
     public HashTable() {
         keyList = new MyLinkedList<>();
         bucketArray = new MyLinkedList<>();
-        //numBuckets = 30;
+        numBuckets = 30;
         //numBuckets = 300;
-        numBuckets = 1000;
+        //numBuckets = 1000;
         size = 0;
         numberOfCollisions = 0;
         collisions = new MyLinkedList<>();
@@ -412,8 +410,7 @@ public class HashTable<String, Integer> {
         // Remove key
         if (prev != null) {
             prev.next = head.next;
-        }
-        else
+        } else
             bucketArray.set(bucketIndex, head.next);
 
         numberOfCollisions -= 1;
@@ -504,13 +501,12 @@ public class HashTable<String, Integer> {
         List<Map<java.lang.String, java.lang.Integer>> list = new LinkedList<>();
         Map<java.lang.String, java.lang.Integer> pair = new TreeMap<>();
 
-        for (java.lang.String key: keyList) {
+        for (java.lang.String key : keyList) {
             pair.put(key, frequency(key));
         }
         list.add(pair);
         return list;
     }
-
 
     // Driver method to test HashTable class
     public static void main(java.lang.String[] args) throws IOException {
@@ -539,8 +535,6 @@ public class HashTable<String, Integer> {
         int wordCount = 0;
 
 
-
-
         Scanner scanner = new Scanner(new BufferedInputStream(
                 (new FileInputStream("alice_in_wonderland.txt"))));
         while (scanner.hasNext()) {
@@ -548,33 +542,34 @@ public class HashTable<String, Integer> {
             wordCount++;
         }
 
+//
+//        System.out.println(alice.frequency("Alice"));
+//        System.out.println(alice.listCollisions());
+//        System.out.println(alice.listKeys());
+//        System.out.println(alice.numberOfCollisions);
+//        System.out.println(alice.size());
+//
+//        System.out.println();
+//
+//        System.out.println(alice.remove("Project"));
+//        System.out.println(alice.listKeys());
+//        System.out.println(alice.numberOfCollisions);
+//        System.out.println(alice.size());
+//
+//        System.out.println();
+//
+//        System.out.println(alice.remove("Alice"));
+//        System.out.println(alice.listKeys());
+//        System.out.println(alice.numberOfCollisions);
+//        System.out.println(alice.size());
+//
+//        System.out.println();
+//
+//        System.out.println(alice.get("The"));
+//        alice.increase("The");
+//        System.out.println(alice.get("The"));
 
-
-        System.out.println(alice.numberOfCollisions);
-        System.out.println(alice.frequency("Alice"));
-        System.out.println(alice.listCollisions());
-        System.out.println(alice.listKeys());
-        System.out.println(alice.size());
-
-        System.out.println();
-
-        System.out.println(alice.remove("Project"));
-        System.out.println(alice.listKeys());
-        System.out.println(alice.numberOfCollisions);
-        System.out.println(alice.size());
-
-        System.out.println();
-
-        System.out.println(alice.remove("Alice"));
-        System.out.println(alice.listKeys());
-        System.out.println(alice.numberOfCollisions);
-        System.out.println(alice.size());
-
-        System.out.println();
-
-        System.out.println(alice.get("The"));
-        alice.increase("The");
-        System.out.println(alice.get("The"));
+        //System.out.println(alice.listCollisions());
 
     }
 }
